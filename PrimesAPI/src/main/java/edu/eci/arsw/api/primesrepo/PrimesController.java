@@ -1,7 +1,14 @@
 package edu.eci.arsw.api.primesrepo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.eci.arsw.api.primesrepo.model.FoundPrime;
 import edu.eci.arsw.api.primesrepo.service.PrimeService;
+import org.apache.coyote.Response;
+import org.omg.CORBA.Object;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,18 +23,29 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RestController
 public class PrimesController
 {
-
+    @Autowired
     PrimeService primeService;
 
+    private ObjectMapper mapper = new ObjectMapper();
 
     @RequestMapping( value = "/primes", method = GET )
-    public List<FoundPrime> getPrimes()
+    public ResponseEntity<?> getPrimes() {
+        try {
+            return new ResponseEntity<?>(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(primeService.getFoundPrimes()), HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            return new ResponseEntity<?>("500 InternalServer error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping( value = "/primes", method = GET )
+    public List<FoundPrime> postPrimes()
     {
+
         return primeService.getFoundPrimes();
     }
 
 
-    //TODO implement additional methods provided by PrimeService
+    
 
 
 

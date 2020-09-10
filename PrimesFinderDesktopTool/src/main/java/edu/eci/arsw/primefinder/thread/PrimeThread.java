@@ -16,7 +16,6 @@ public class PrimeThread extends Thread{
         this.inf = a;
         this.sup = b;
         this.resultSet = set;
-        System.out.println(inf.toString() + " " + sup.toString());
     }
 
     @Override

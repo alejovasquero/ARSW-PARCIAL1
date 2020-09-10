@@ -1,32 +1,39 @@
 package edu.eci.arsw.api.primesrepo.service;
 
 import edu.eci.arsw.api.primesrepo.model.FoundPrime;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Santiago Carrillo
  * 2/22/18.
  */
-public class PrimeServiceStub implements PrimeService
-{
+@Service
+public class PrimeServiceStub implements PrimeService {
+
+    private ConcurrentHashMap<String , FoundPrime> primes = new ConcurrentHashMap<>();
+
     @Override
     public void addFoundPrime( FoundPrime foundPrime )
     {
-        //TODO
+        primes.put(foundPrime.getPrime(), foundPrime);
     }
 
     @Override
     public List<FoundPrime> getFoundPrimes()
     {
-        //TODO
-        return null;
+        return new ArrayList<>(primes.values());
     }
 
     @Override
     public FoundPrime getPrime( String prime )
     {
-        //TODO
+        if(prime.contains(prime)){
+            return primes.get(prime);
+        }
         return null;
     }
 }
