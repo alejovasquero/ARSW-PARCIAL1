@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -37,14 +38,20 @@ public class PrimesController
         }
     }
 
-    @RequestMapping( value = "/primes/{primenumber}", method = POST )
-    public ResponseEntity<?> postPrimes(@PathVariable String primenumber, @RequestBody String body) {
-        FoundPrime current = primeService.getPrime(primenumber);
-        FoundPrime
-        if(current != null  && !current.getPrime().equals(primenumber)){
-            return new ResponseEntity<>("400 Bad Request", HttpStatus.BAD_REQUEST);
+    @RequestMapping( value = "/primes", method = POST )
+    public ResponseEntity<?> postPrimes(@RequestBody String body) {
+        try {
+            FoundPrime newer = mapper.readValue(body, FoundPrime.class);
+            FoundPrime current = primeService.getPrime(newer.getPrime());
+            if(current != null  && !newer.getUser().equals(current.getUser())){
+                return new ResponseEntity<>("400 Bad Request", HttpStatus.BAD_REQUEST);
+            }
+            primeService.addFoundPrime(newer);
+            return new ResponseEntity<>("200 OK", HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("500 InternalServer error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        FoundPrime insert = mapper.readValue()
+
     }
 
     @RequestMapping( value = "/primes/{primenumber}", method = GET )
