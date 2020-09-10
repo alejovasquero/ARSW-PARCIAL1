@@ -44,7 +44,7 @@ public class PrimesController
             FoundPrime newer = mapper.readValue(body, FoundPrime.class);
             FoundPrime current = primeService.getPrime(newer.getPrime());
             if(current != null  && !newer.getUser().equals(current.getUser())){
-                return new ResponseEntity<>("400 Bad Request", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("403 Forbidden", HttpStatus.FORBIDDEN);
             }
             primeService.addFoundPrime(newer);
             return new ResponseEntity<>("200 OK", HttpStatus.OK);

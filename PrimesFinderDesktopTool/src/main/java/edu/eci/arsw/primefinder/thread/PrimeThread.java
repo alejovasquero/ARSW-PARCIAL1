@@ -25,12 +25,15 @@ public class PrimeThread extends Thread{
         MathUtilities mt=new MathUtilities();
         BigInteger i=a;
         while (i.compareTo(b)<=0){
+            checkPause();
+            System.out.println("WORKING");
             PrimeFinder.itCount.incrementAndGet();
             if (mt.isPrime(i)){
                 resultSet.addPrime(i);
             }
             i=i.add(BigInteger.ONE);
         }
+        PrimeFinder.threadsDone.decrementAndGet();
     }
 
     public void checkPause(){

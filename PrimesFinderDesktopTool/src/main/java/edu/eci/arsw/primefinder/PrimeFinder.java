@@ -15,9 +15,11 @@ public class PrimeFinder{
 	public static Object pauseLock = new Object();
     public static AtomicBoolean paused= new AtomicBoolean(true);
 	public static AtomicInteger itCount = new AtomicInteger(0);
+	public static AtomicInteger threadsDone = new AtomicInteger(0);
         
 	public static void findPrimes(BigInteger _a, BigInteger _b, PrimesResultSet prs, int threads){
 	    List<Thread> mimics = new ArrayList<Thread>();
+	    threadsDone.set(threads);
 	    BigInteger t = new BigInteger(String.valueOf(threads));
 	    BigInteger n = _b.add(_a.multiply(new BigInteger(String.valueOf(-1))).add(BigInteger.ONE));
 	    if(threads == 1){
